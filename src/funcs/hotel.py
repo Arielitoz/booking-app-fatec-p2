@@ -1,33 +1,43 @@
 import funcs.formatacao
-import time
-import sqlite3
+import time, sys, sqlite3, main
 
 conn = sqlite3.connect("hotel.db")
 cur = conn.cursor()
 
 # função para escolha na rota HOTEL realizado pelo usuário(funcionário do estabelecimento) - Funciona como um switch case
-def escolhaHotel():
-    funcs.formatacao.colocarLinhas()
-    escolhaHotel = input("\nNas opções de gerenciamento do hotel , temos:\n\n\n1 - Verificar quartos(Read-all)\n2 - Verificar quarto N°(Read - Id)\n3 - Cadastrar Quarto(Create)\n4 - Atualizar quarto: (Update)\n5 - Remover um quarto(Delete)\n6 - Voltar\nInsira uma opção: ---> ")
-   
-    if escolhaHotel == "1":
-        print("oi1")
-    elif escolhaHotel == "2":
-        print("oi2")
-    elif escolhaHotel == "3":
-        cadastrarQuarto()
-    elif escolhaHotel == "4":
-        print("oi4")
-    elif escolhaHotel == "5":
-        print("oi5")
-    elif escolhaHotel == "6":
-        print("oi6")
-    else:
-        print("Estamos voltando ao ínicio, obrigado!")
-        quit()
+def escolha_Hotel():
+    try:
+        funcs.formatacao.colocarLinhas()
+        escolhaHotel = input("FHA - Gerenciamento do hotel , temos:\n\n1 - Verificar quartos(Read-all)\n2 - Verificar quarto N°(Read - Id)\n3 - Cadastrar Quarto(Create)\n4 - Atualizar quarto: (Update)\n5 - Remover um quarto(Delete)\n6 - Voltar à escolha anterior\n7 - Encerrar\nInsira uma opção: ---> ")
+    
+        if escolhaHotel == "1":
+            print("oi1")
+        elif escolhaHotel == "2":
+            print("oi2")
+        elif escolhaHotel == "3":
+            cadastrar_Quarto()
+        elif escolhaHotel == "4":
+            print("oi4")
+        elif escolhaHotel == "5":
+            print("oi5")
+        elif escolhaHotel == "6":
+            main.main()
+        elif escolhaHotel == "7":
+            print("Obrigado por usar os serviços FHA, encerrando o programa. :)")
+            time.sleep(1)
+            sys.exit()
+        else:
+            print("Opção inválida, insira novamente:")
+            time.sleep(1)
+            escolha_Hotel()
+
+    except KeyboardInterrupt:
+        print("\nEncerrando o programa, FHA agradece. ;)")
+        time.sleep(1)
+        sys.exit()
 
 # função para cadastro de quarto 
-def cadastrarQuarto():
+def cadastrar_Quarto():
     numeroQuarto = input("Insira o n° do quarto")
     qtdTotalQuartos = input("N° de pessoas junto ao hóspede") # default number
     qtdDisponivel = input("Qual o número do quarto")

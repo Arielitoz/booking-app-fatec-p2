@@ -1,3 +1,3 @@
 # função para formatação do programa
 def colocarLinhas():
-    print("--" * 50 + "\n")
+    print("\n"+("--" * 50) + "\n")
