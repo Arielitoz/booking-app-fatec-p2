@@ -1,7 +1,8 @@
 import funcs.formatacao
-import time, sys, sqlite3, main, datetime
+import time, sys, sqlite3, main, datetime, os
 
-conn = sqlite3.connect("hotel.db")
+db_path = os.path.join(os.path.dirname(__file__), "..", "hotel.db")
+conn = sqlite3.connect(db_path)
 cur = conn.cursor()
 
 # função para escolha na rota HÓSPEDE realizado pelo usuário(funcionário do estabelecimento) - Funciona como um switch case
@@ -42,19 +43,21 @@ def cadastrar_Hospede():
     try:
         funcs.formatacao.formatacaoCreate()
         print("Reserva Hóspede:")
+        idhospede = None
         nomeHospede = input("\nNome do hóspede: ")
         qtdPessoas = input("N° de pessoas no quarto: ")
-        quartoAlugado = input("N° do quarto: ")
+        numeroQuartoAlugado = input("N° do quarto: ")
         diarias = input("Quantidade de diárias: ")
         print("Check-In realizado no dia: " + str(datetime.datetime.now()))
-        cdt = datetime.datetime.today()
-        dataCheckIn = cdt.date() # formato data ex: 2023-11-17 (YYYY-MM-DD)
-        #dataCheckOut = input("Insira a data de saída") provavelmente tirar esse campo
+        currentdate = datetime.datetime.today()
+        dataCheckIn = currentdate.date() # formato data ex: 2023-11-17 (YYYY-MM-DD)
         formaPagamento = ""
         # while formaPagamento.upper() != 'C' and formaPagamento.upper() != "D" and formaPagamento.upper() != "P":
         while formaPagamento.upper() not in {'C', 'D', 'P'}:
             formaPagamento = input("\nForma de pagamento: \nC - Crédito;\nD - Débito;\nP - Pix;\n> ")
         print("Forma de pagamento aceita")
+        time.sleep(1)
+        print("\nReserva feita em nome de: " + nomeHospede + ", Obrigado(a)!")
 
     except KeyboardInterrupt:
         print("\nEncerrando o programa, FHA agradece. ;)")
@@ -62,5 +65,20 @@ def cadastrar_Hospede():
         sys.exit()
 
     #Enviar instrução a ser executada pelo sqlite; try this later
-    #conn.execute("insert into HOSPEDE values(?,?,?,?,?,?,?)", (nomeHospede, qtdPessoas,quartoAlugado, diarias, formaPagamento, dataCheckIn, dataCheckOut));
-    #conn.commit()
+    conn.execute("INSERT INTO hospede VALUES(?,?,?,?,?,?,?)", (idhospede,nomeHospede, qtdPessoas,numeroQuartoAlugado, diarias, dataCheckIn, formaPagamento));
+    conn.commit()
+
+
+    escolhaNovamente = input("\nDeseja cadastrar um novo hóspede: S - SIM / N - NÃO\n>  ")
+    match escolhaNovamente.upper():
+        case 'S':
+            cadastrar_Hospede()
+        case 'N':
+            print("Obrigado por utilizar nossos serviços, FHA agradece.")
+            conn.close()
+            time.sleep(1)
+            sys.exit()
+        case _:
+            print('\n Não foi possível entender seu desejo, obrigado')
+            conn.close()
+            sys.exit()

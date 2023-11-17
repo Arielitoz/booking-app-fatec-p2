@@ -1,0 +1,15 @@
+DROP TABLE IF EXISTS hospede;
+CREATE TABLE hospede 
+(
+	idHospede INTEGER PRIMARY KEY AUTOINCREMENT,
+	nomeHospede varchar(30) NOT NULL, 
+	qtdPessoas INTEGER DEFAULT 1 NOT NULL,
+	numeroQuarto INTEGER NOT NULL,
+	qtdDiarias INTEGER NOT NULL,
+	checkIn date,
+	formaPagamento varchar(1) NOT NULL
+);
+
+SELECT DATE('now');
+
+SELECT * FROM HOSPEDE;
