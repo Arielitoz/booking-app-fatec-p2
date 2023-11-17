@@ -21,7 +21,7 @@ def escolha_Hospede():
             case "4":
                 print("oi4")
             case "5":
-                print("oi5")
+                deletar_Hospede()
             case "6":
                 main.main()
             case "7":
@@ -82,3 +82,27 @@ def cadastrar_Hospede():
             print('\n Não foi possível entender seu desejo, obrigado')
             conn.close()
             sys.exit()
+
+# funcão para cadastro de hóspede
+def deletar_Hospede():
+    print("\nVamos finalizar o Check-Out")
+    time.sleep(1)
+    idHospede = input("\nInsira o código do hóspede para realizar a operação: \n> ")
+    time.sleep(0.5)
+    # tratativa de insert
+    cur.execute("Select count(*), nomeHospede, numeroQuarto from hospede where idHospede = 1")
+    resCodigoDelete = cur.fetchone()
+    if resCodigoDelete[0] > 1:
+        print("Existe uma reserva no nome de '",resCodigoDelete[1].upper(),"'. No quarto, N°:", resCodigoDelete[2])
+        validarExclusao = input("\nDeseja finalizar o Check-Out? S- Sim; \nN - Não")
+
+        if validarExclusao.upper() == "S":
+            cur.execute("Delete from curso where codigo = " + idHospede)
+            conn.commit()
+            print("\nCheck-out realizado com sucesso;")
+        # conn.close()
+        escolha_Hospede()
+        # is istance, validar se o numero é valido e se nao é vazio, se nao é letra
+    else: 
+        print("Nenhuma reserva foi identificada!")
+        escolha_Hospede()
