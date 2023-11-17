@@ -15,20 +15,22 @@ def escolha_Inicial():
     try:
         funcs.formatacao.colocarLinhas()
         escolhaInicial = input("Bem-vindo(a) ao sistema FHA: Facilitador de Hospedagem e Acomodações:\n\nInsira um opção:\n1 - Hotel/Quartos\n2 - Hóspedes\n3 - Encerrar\nOpção desejada: ---> ")
-        if escolhaInicial == "1":
-            sleep(1)
-            funcs.hotel.escolha_Hotel()
-        elif escolhaInicial == "2":
-            sleep(1)
-            funcs.hospede.escolha_Hospede()
-        elif escolhaInicial == "3":
-            print("Obrigado por usar os serviços FHA, encerrando o programa. :)")
-            sleep(1)
-            sys.exit()
-        else:
-            print("Insira novamente, opção inválida!!")
-            sleep(1)
-            escolha_Inicial()
+        # match case == switch case
+        match escolhaInicial:
+            case '1':
+                sleep(1)
+                funcs.hotel.escolha_Hotel()
+            case '2':
+                sleep(1)
+                funcs.hospede.escolha_Hospede()
+            case '3':
+                print("Obrigado por usar os serviços FHA, encerrando o programa. :)")
+                sleep(1)
+                sys.exit()
+            case _:
+                print("Insira novamente, opção inválida!!")
+                sleep(1)
+                escolha_Inicial()
 
     except KeyboardInterrupt:
         print("\nEncerrando o programa, FHA agradece. ;)")

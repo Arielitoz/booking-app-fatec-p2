@@ -9,27 +9,28 @@ def escolha_Hotel():
     try:
         funcs.formatacao.colocarLinhas()
         escolhaHotel = input("FHA - Gerenciamento do hotel , temos:\n\n1 - Verificar quartos(Read-all)\n2 - Verificar quarto N°(Read - Id)\n3 - Cadastrar Quarto(Create)\n4 - Atualizar quarto: (Update)\n5 - Remover um quarto(Delete)\n6 - Voltar à escolha anterior\n7 - Encerrar\nInsira uma opção: ---> ")
-    
-        if escolhaHotel == "1":
-            print("oi1")
-        elif escolhaHotel == "2":
-            print("oi2")
-        elif escolhaHotel == "3":
-            cadastrar_Quarto()
-        elif escolhaHotel == "4":
-            print("oi4")
-        elif escolhaHotel == "5":
-            print("oi5")
-        elif escolhaHotel == "6":
-            main.main()
-        elif escolhaHotel == "7":
-            print("Obrigado por usar os serviços FHA, encerrando o programa. :)")
-            time.sleep(1)
-            sys.exit()
-        else:
-            print("Opção inválida, insira novamente:")
-            time.sleep(1)
-            escolha_Hotel()
+
+        match escolhaHotel:
+            case "1":
+                print("oi1")
+            case "2":
+                print("oi2")
+            case "3":
+                cadastrar_Quarto()
+            case "4":
+                print("oi4")
+            case "5":
+                print("oi5")
+            case "6":
+                main.main()
+            case "7":
+                print("Obrigado por usar os serviços FHA, encerrando o programa. :)")
+                time.sleep(1)
+                sys.exit()
+            case _:
+                print("Opção inválida, insira novamente:")
+                time.sleep(1)
+                escolha_Hotel()
 
     except KeyboardInterrupt:
         print("\nEncerrando o programa, FHA agradece. ;)")
