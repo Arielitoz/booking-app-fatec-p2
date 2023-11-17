@@ -1,5 +1,5 @@
 import funcs.formatacao
-import time, sys, sqlite3, main
+import time, sys, sqlite3, main, datetime
 
 conn = sqlite3.connect("hotel.db")
 cur = conn.cursor()
@@ -38,6 +38,7 @@ def escolha_Hotel():
 
 # função para cadastro de quarto 
 def cadastrar_Quarto():
+    print("\nVamos cadastrar uma reserva de")
     numeroQuarto = input("Insira o n° do quarto")
     qtdTotalQuartos = input("N° de pessoas junto ao hóspede") # default number
     qtdDisponivel = input("Qual o número do quarto")
