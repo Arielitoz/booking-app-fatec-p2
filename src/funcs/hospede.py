@@ -45,7 +45,7 @@ def cadastrar_Hospede():
         print("Reserva Hóspede:")
         idhospede = None
         nomeHospede = input("\nNome do hóspede: ")
-        qtdPessoas = input("N° de pessoas no quarto: ")
+        qtdPessoas = input("N° de pessoas no quarto: ") # validar n°
         numeroQuartoAlugado = input("N° do quarto: ")
         diarias = input("Quantidade de diárias: ")
         print("Check-In realizado no dia: " + str(datetime.datetime.now()))
@@ -90,19 +90,20 @@ def deletar_Hospede():
     idHospede = input("\nInsira o código do hóspede para realizar a operação: \n> ")
     time.sleep(0.5)
     # tratativa de insert
-    cur.execute("Select count(*), nomeHospede, numeroQuarto from hospede where idHospede = 1")
+    cur.execute("Select count(*), nomeHospede, numeroQuarto from hospede where idHospede = " + idHospede)
     resCodigoDelete = cur.fetchone()
-    if resCodigoDelete[0] > 1:
+    if len(resCodigoDelete) > 1:
         print("Existe uma reserva no nome de '",resCodigoDelete[1].upper(),"'. No quarto, N°:", resCodigoDelete[2])
-        validarExclusao = input("\nDeseja finalizar o Check-Out? S- Sim; \nN - Não")
+        validarExclusao = input("\nDeseja finalizar o Check-Out? \nS- Sim; N - Não\n> ")
 
         if validarExclusao.upper() == "S":
-            cur.execute("Delete from curso where codigo = " + idHospede)
+            cur.execute("Delete from hospede where idHospede = " + idHospede)
             conn.commit()
+            time.sleep(0.5)
             print("\nCheck-out realizado com sucesso;")
+            time.sleep(0.5)
         # conn.close()
         escolha_Hospede()
-        # is istance, validar se o numero é valido e se nao é vazio, se nao é letra
     else: 
         print("Nenhuma reserva foi identificada!")
         escolha_Hospede()
