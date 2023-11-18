@@ -5,6 +5,8 @@ db_path = os.path.join(os.path.dirname(__file__), "..", "hotel.db")
 conn = sqlite3.connect(db_path)
 cur = conn.cursor()
 
+resCodigo = None
+
 # função para escolha na rota HÓSPEDE realizado pelo usuário(funcionário do estabelecimento) - Funciona como um switch case
 def escolha_Hospede():
     try:
@@ -13,13 +15,13 @@ def escolha_Hospede():
     
         match escolhaHospede:
             case "1":
-                print("oi")
+                recuperar_Hospedes()
             case "2":
-                print("oi2")
+                recuper_HospedeId()
             case "3":
                 cadastrar_Hospede()
             case "4":
-                print("oi4")
+                alterar_Hospede()
             case "5":
                 deletar_Hospede()
             case "6":
@@ -41,7 +43,7 @@ def escolha_Hospede():
 # funcão para cadastro de hóspede
 def cadastrar_Hospede():
     try:
-        funcs.formatacao.formatacaoCreate()
+        funcs.formatacao.formatacaoFHA()
         print("Reserva Hóspede:")
         idhospede = None
         nomeHospede = input("\nNome do hóspede: ")
@@ -87,13 +89,14 @@ def cadastrar_Hospede():
 def deletar_Hospede():
     print("\nVamos finalizar o Check-Out")
     time.sleep(1)
+    # validação campos
     idHospede = input("\nInsira o código do hóspede para realizar a operação: \n> ")
     time.sleep(0.5)
     # tratativa de insert
     cur.execute("Select count(*), nomeHospede, numeroQuarto from hospede where idHospede = " + idHospede)
-    resCodigoDelete = cur.fetchone()
-    if len(resCodigoDelete) > 1:
-        print("Existe uma reserva no nome de '",resCodigoDelete[1].upper(),"'. No quarto, N°:", resCodigoDelete[2])
+    resCodigo = cur.fetchone()
+    if resCodigo[0] == 1:
+        print("Existe uma reserva no nome de '",resCodigo[1].upper(),"'. No quarto, N°:", resCodigo[2])
         validarExclusao = input("\nDeseja finalizar o Check-Out? \nS- Sim; N - Não\n> ")
 
         if validarExclusao.upper() == "S":
@@ -104,6 +107,43 @@ def deletar_Hospede():
             time.sleep(0.5)
         # conn.close()
         escolha_Hospede()
-    else: 
+    else:
+        time.sleep(0.5)
         print("Nenhuma reserva foi identificada!")
+        time.sleep(0.5)
         escolha_Hospede()
+
+def alterar_Hospede():
+    print("\nIuiu")
+
+def recuperar_Hospedes():
+    print('\noioioi')
+
+def recuper_HospedeId():
+    time.sleep(0.5)
+    # validação campos
+    idHospede = input("\nInsira o código do hóspede para buscar um registro: \n> ")
+    time.sleep(0.5)
+    # tratativa de insert
+
+    cur.execute("Select count(*), nomeHospede, numeroQuarto, checkIn from hospede where idHospede = " + idHospede)
+    resCodigo = cur.fetchone()
+    if (int(idHospede)) < 0 :
+        print("O valor não pode ser negativo , insira novamente")
+        recuper_HospedeId()
+    if resCodigo[0] > 0:
+        time.sleep(0.5)
+        print("\nRegistro encontrado: ")
+        funcs.formatacao.formatacaoFHA()
+        print("\nNome Completo:", resCodigo[1].upper())
+        print("N° do Quarto:" , resCodigo[2])
+        print("Check-In realizado na data:", resCodigo[3]);
+        funcs.formatacao.formatacaoFHA()
+    else:
+        print("\nNenhum registro encontrado em nossa base, FHA agradece")
+        time.sleep(1)
+        escolha_Hospede()
+        
+    time.sleep(1)
+    escolha_Hospede()
+
