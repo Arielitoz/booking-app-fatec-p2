@@ -26,6 +26,7 @@ def escolha_Hotel():
             case "7":
                 print("Obrigado por usar os serviços FHA, encerrando o programa. :)")
                 time.sleep(1)
+                conn.close()
                 sys.exit()
             case _:
                 print("Opção inválida, insira novamente:")
@@ -35,6 +36,7 @@ def escolha_Hotel():
     except KeyboardInterrupt:
         print("\nEncerrando o programa, FHA agradece. ;)")
         time.sleep(1)
+        conn.close()
         sys.exit()
 
 # função para cadastro de quarto 

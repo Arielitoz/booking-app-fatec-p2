@@ -29,6 +29,7 @@ def escolha_Hospede():
             case "7":
                 print("Obrigado por usar os serviços FHA, encerrando o programa. :)")
                 time.sleep(1)
+                conn.close()
                 sys.exit()
             case _:
                 print("Opção inválida, insira novamente:")
@@ -38,6 +39,7 @@ def escolha_Hospede():
     except KeyboardInterrupt:
         print("\nEncerrando o programa, FHA agradece. ;)")
         time.sleep(1)
+        conn.close()
         sys.exit()
 
 # funcão para cadastro de hóspede
@@ -64,6 +66,7 @@ def cadastrar_Hospede():
     except KeyboardInterrupt:
         print("\nEncerrando o programa, FHA agradece. ;)")
         time.sleep(1)
+        conn.close()
         sys.exit()
 
     #Enviar instrução a ser executada pelo sqlite; try this later
@@ -92,7 +95,7 @@ def deletar_Hospede():
     # validação campos
     idHospede = input("\nInsira o código do hóspede para realizar a operação: \n> ")
     time.sleep(0.5)
-    # tratativa de insert
+    
     cur.execute("Select count(*), nomeHospede, numeroQuarto from hospede where idHospede = " + idHospede)
     resCodigo = cur.fetchone()
     if resCodigo[0] == 1:
@@ -105,7 +108,7 @@ def deletar_Hospede():
             time.sleep(0.5)
             print("\nCheck-out realizado com sucesso;")
             time.sleep(0.5)
-        # conn.close()
+       
         escolha_Hospede()
     else:
         time.sleep(0.5)
@@ -117,7 +120,34 @@ def alterar_Hospede():
     print("\nIuiu")
 
 def recuperar_Hospedes():
-    print('\noioioi')
+    time.sleep(0.5)
+    print("\nRecuperando registros em nossa base de dados: ")
+    time.sleep(0.5)
+
+    cur.execute("Select nomeHospede, numeroQuarto, checkIn from hospede")
+    resCodigo = cur.fetchall()
+
+    if len(resCodigo) >  0:
+
+        print("\nRegistros encontrados: ")
+        for registros in resCodigo:
+            funcs.formatacao.formatacaoFHA()
+            print("\nNome Completo:", registros[0].upper())
+            print("N° do Quarto:" , registros[1])
+            print("Check-In realizado na data:", registros[2]);
+            funcs.formatacao.formatacaoFHA()
+            time.sleep(0.5)
+
+        print("\nForam encontrados um total de:" , len(resCodigo), "registro(s)  em nossa base;")
+        time.sleep(0.5)
+        print('\nVoltando às opções:')
+        time.sleep(0.5)
+        escolha_Hospede()
+    else:
+        print("\nNenhum registro encontrado em nossa base, FHA agradece")
+        time.sleep(1)
+        escolha_Hospede()
+
 
 def recuper_HospedeId():
     time.sleep(0.5)
