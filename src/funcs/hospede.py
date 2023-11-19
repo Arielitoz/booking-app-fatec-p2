@@ -6,6 +6,7 @@ conn = sqlite3.connect(db_path)
 cur = conn.cursor()
 
 resCodigo = None
+idhospede = None
 
 # função para escolha na rota HÓSPEDE realizado pelo usuário(funcionário do estabelecimento) - Funciona como um switch case
 def escolha_Hospede():
@@ -42,12 +43,11 @@ def escolha_Hospede():
         conn.close()
         sys.exit()
 
-# funcão para cadastro de hóspede
+# funcão para cadastro de hóspede - create
 def cadastrar_Hospede():
     try:
         funcs.formatacao.formatacaoFHA()
         print("Reserva Hóspede:")
-        idhospede = None
         nomeHospede = input("\nNome do hóspede: ")
         qtdPessoas = input("N° de pessoas no quarto: ") # validar n°
         numeroQuartoAlugado = input("N° do quarto: ")
@@ -88,14 +88,14 @@ def cadastrar_Hospede():
             conn.close()
             sys.exit()
 
-# funcão para cadastro de hóspede
+# funcão para deeltar registro de hóspede(delete)
 def deletar_Hospede():
     print("\nVamos finalizar o Check-Out")
     time.sleep(1)
     # validação campos
     idHospede = input("\nInsira o código do hóspede para realizar a operação: \n> ")
     time.sleep(0.5)
-    
+
     cur.execute("Select count(*), nomeHospede, numeroQuarto from hospede where idHospede = " + idHospede)
     resCodigo = cur.fetchone()
     if resCodigo[0] == 1:
@@ -116,9 +116,72 @@ def deletar_Hospede():
         time.sleep(0.5)
         escolha_Hospede()
 
+# função para alterar(update) os dados do  banco de dados - Alterar um registro, campo do banco de dados
 def alterar_Hospede():
-    print("\nIuiu")
+    print("\nAlteração de reserva:")
+    time.sleep(1)
+    # validação campos
+    idHospede = input("\nInsira o código do hóspede para realizar a operação: \n> ")
+    time.sleep(0.5)
 
+    cur.execute("Select count(*), nomeHospede, numeroQuarto,qtdDiarias, formaPagamento from hospede where idHospede = " + idHospede)
+    resCodigo = cur.fetchone()
+    if resCodigo[0] == 1:
+        print("\nExiste uma reserva no nome de '",resCodigo[1].upper(),"'. No quarto, N°:", resCodigo[2], ".\nQuantidade de diárias: ", resCodigo[3], ". Forma de Pagamento: ", resCodigo[4].upper())
+        time.sleep(0.5)
+        escolhaAlteracao = input('\nO que deseja alterar: \n1 - Nome; \n2 - N°Quarto;\n3 - Diárias;\n4 - Forma de Pagamento\n> ')
+        match escolhaAlteracao:
+            case '1':
+                nomeHospede = input("Insira a atualização de Nome: ")
+                time.sleep(0.5)
+                conn.execute("UPDATE hospede SET nomeHospede = ? WHERE idHospede = ?;", (nomeHospede,idHospede));
+                conn.commit()
+                time.sleep(0.5)
+                print("\nAlteração concluída!")
+                time.sleep(0.5)
+                escolha_Hospede()
+            case '2':
+                numeroQuarto = input("Insira a atualização referente ao número de quartos: ")
+                time.sleep(0.5)
+                conn.execute("UPDATE hospede SET numeroQuarto = ? WHERE idHospede = ?;", (numeroQuarto,idHospede));
+                conn.commit()
+                time.sleep(0.5)
+                print("\nAlteração concluída!")
+                time.sleep(0.5)
+                escolha_Hospede()
+            case '3':
+                qtdDiarias = input("Insira a atualização referente ao número de diárias: ")
+                time.sleep(0.5)
+                conn.execute("UPDATE hospede SET qtdDiarias = ? WHERE idHospede = ?;", (qtdDiarias,idHospede));
+                conn.commit()
+                time.sleep(0.5)
+                print("\nAlteração concluída!")
+                time.sleep(0.5)
+                escolha_Hospede()
+            case '4':
+                formaPagamento = ""
+                while formaPagamento.upper() not in {'C', 'D', 'P'}:
+                    formaPagamento = input("\nForma de pagamento: \nC - Crédito;\nD - Débito;\nP - Pix;\n> ")
+                print("Forma de pagamento aceita")
+                time.sleep(0.5)
+                conn.execute("UPDATE hospede SET formaPagamento = ? WHERE idHospede = ?;", (formaPagamento,idHospede));
+                conn.commit()
+                time.sleep(0.5)
+                print("\nAlteração concluída!")
+                time.sleep(0.5)
+                escolha_Hospede()
+            case _:
+                print("Opção inválida, insira novamente:")
+                time.sleep(1)
+                alterar_Hospede()
+                
+    else:
+        time.sleep(0.5)
+        print("Nenhuma reserva foi identificada!")
+        time.sleep(0.5)
+        escolha_Hospede()
+
+# função para recuperar(read) os dados do  banco de dados - todos os registros
 def recuperar_Hospedes():
     time.sleep(0.5)
     print("\nRecuperando registros em nossa base de dados: ")
@@ -148,13 +211,12 @@ def recuperar_Hospedes():
         time.sleep(1)
         escolha_Hospede()
 
-
+# função para recuperar(read) os dados do  banco de dados - registro único
 def recuper_HospedeId():
     time.sleep(0.5)
     # validação campos
     idHospede = input("\nInsira o código do hóspede para buscar um registro: \n> ")
     time.sleep(0.5)
-    # tratativa de insert
 
     cur.execute("Select count(*), nomeHospede, numeroQuarto, checkIn from hospede where idHospede = " + idHospede)
     resCodigo = cur.fetchone()
@@ -176,4 +238,3 @@ def recuper_HospedeId():
         
     time.sleep(1)
     escolha_Hospede()
-
