@@ -1,8 +1,8 @@
-import funcs.formatacao
-import time, sys, sqlite3, main, datetime
+import funcs.formatacao, main, sys, time
+# import time, sys, sqlite3, main, datetime
 
-conn = sqlite3.connect("hotel.db")
-cur = conn.cursor()
+# conn = sqlite3.connect("hotel.db")
+# cur = conn.cursor()
 
 # função para escolha na rota HOTEL realizado pelo usuário(funcionário do estabelecimento) - Funciona como um switch case
 def escolha_Hotel():
@@ -12,21 +12,21 @@ def escolha_Hotel():
 
         match escolhaHotel:
             case "1":
-                print("oi1")
+                escolha_Hotel()
             case "2":
-                print("oi2")
+                escolha_Hotel()
             case "3":
-                cadastrar_Quarto()
+                escolha_Hotel()
             case "4":
-                print("oi4")
+                escolha_Hotel()
             case "5":
-                print("oi5")
+                escolha_Hotel()
             case "6":
                 main.main()
             case "7":
                 print("Obrigado por usar os serviços FHA, encerrando o programa. :)")
                 time.sleep(1)
-                conn.close()
+                # conn.close()
                 sys.exit()
             case _:
                 print("Opção inválida, insira novamente:")
@@ -36,19 +36,41 @@ def escolha_Hotel():
     except KeyboardInterrupt:
         print("\nEncerrando o programa, FHA agradece. ;)")
         time.sleep(1)
-        conn.close()
+        # conn.close()
         sys.exit()
 
 # função para cadastro de quarto 
-def cadastrar_Quarto():
-    print("\nVamos cadastrar uma reserva de")
-    numeroQuarto = input("Insira o n° do quarto")
-    qtdTotalQuartos = input("N° de pessoas junto ao hóspede") # default number
-    qtdDisponivel = input("Qual o número do quarto")
-    diarias = input("Insira a quantidade de dias")
-    formaPagamento = input("Insira C - crédito; D - Débito; P - Pix")
-    dataCheckIn = input("Insira o dia")
+# def cadastrar_Quarto():
+#     print("\nVamos cadastrar uma reserva de")
+#     numeroQuarto = input("Insira o n° do quarto")
+#     qtdTotalQuartos = input("N° de pessoas junto ao hóspede") # default number
+#     qtdDisponivel = input("Qual o número do quarto")
+#     diarias = input("Insira a quantidade de dias")
+#     formaPagamento = input("Insira C - crédito; D - Débito; P - Pix")
+#     dataCheckIn = input("Insira o dia")
 
-    #Enviar instrução a ser executada pelo sqlite
-    conn.execute("insert into HOSPEDE values(?,?,?,?,?,?,?)", (nomeHospede, qtdPessoas,quartoAlugado, diarias, formaPagamento, dataCheckIn, dataCheckOut));
-    conn.commit()
+#     #Enviar instrução a ser executada pelo sqlite
+#     conn.execute("insert into HOSPEDE values(?,?,?,?,?,?,?)", (nomeHospede, qtdPessoas,quartoAlugado, diarias, formaPagamento, dataCheckIn, dataCheckOut));
+#     conn.commit()
+
+def iniciar_Login():
+    try:
+        funcs.formatacao.colocarLinhas()
+        print("\nIniciando Sistema...")
+        time.sleep(1)
+        usuario = input("\nInsira seu login de usuário: ")
+        senhaUsuario = input("\nInsira sua senha: ")
+
+        if usuario == "fatecsegna2" and senhaUsuario == "fatec4242":
+            print("Você tem acesso de admin")
+            time.sleep(1)
+            escolha_Hotel()
+        else:
+            print("\nVocê não tem acesso de administrador")
+            time.sleep(1)
+            main.main()
+    except KeyboardInterrupt:
+        print("\nEncerrando o programa, FHA agradece. ;)")
+        time.sleep(1)
+        # conn.close()
+        sys.exit()

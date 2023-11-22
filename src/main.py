@@ -14,12 +14,12 @@ def main():
 def escolha_Inicial():
     try:
         funcs.formatacao.colocarLinhas()
-        escolhaInicial = input("Bem-vindo(a) ao sistema FHA: Facilitador de Hospedagem e Acomodações:\n\nInsira um opção:\n1 - Hotel/Quartos\n2 - Hóspedes\n3 - Encerrar\nOpção desejada: ---> ")
+        escolhaInicial = input("Bem-vindo(a) ao sistema FHA: Facilitador de Hospedagem e Acomodações:\n\nInsira um opção:\n1 - Hotel\n2 - Hóspedes/Quartos\n3 - Encerrar\nOpção desejada: ---> ")
         # match case == switch case
         match escolhaInicial:
             case '1':
                 sleep(1)
-                funcs.hotel.escolha_Hotel()
+                funcs.hotel.iniciar_Login()
             case '2':
                 sleep(1)
                 funcs.hospede.escolha_Hospede()
