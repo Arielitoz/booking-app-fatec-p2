@@ -2,10 +2,11 @@
 Repositório referente à prova da matéria de Programação II 
 
 # Next Steps:
-[ ] Crud Check:
+[ X ] Crud Check:
     - Create
     - Read ( All / Id)
     - Update
     - Delete
 <br>
-[ ] Validate statements & if clauses
+[ WIP ] Validate statements & if clauses
+[ ] Validate Room number 
