@@ -8,7 +8,9 @@ cur = conn.cursor()
 resCodigo = None
 idhospede = None
 regexPadraoCaracteres = re.compile('[a-zA-Z@_!#$%^&*()<>?/\|,.}{~:]+$')
-regexPadraoCaracteresNumeros = re.compile('[0-9@_!#$%^&*()<>?/\|,.}{~:]+$')
+# regexPadraoCaracteresNumeros = re.compile('^[0-9@_!#$%^&*()<>?/\|,.}{~:]+$')
+regexPadraoCaracteresNumeros = re.compile('^[a-zA-Z ]+$')
+
 
 # função para escolha na rota HÓSPEDE realizado pelo usuário(funcionário do estabelecimento) - Funciona como um switch case
 def escolha_Hospede():
@@ -61,7 +63,7 @@ def cadastrar_Hospede():
             partes_do_nome = nomeHospede.split()
             
             time.sleep(0.5)
-            if (regexPadraoCaracteresNumeros.search(nomeHospede) == None) and (len(partes_do_nome) == 2 and partes_do_nome[0].istitle() and partes_do_nome[1].istitle() and len(nomeHospede)):
+            if (regexPadraoCaracteresNumeros.search(nomeHospede) is not None) and (len(partes_do_nome) == 2 and partes_do_nome[0].istitle() and partes_do_nome[1].istitle() and len(nomeHospede)):
                 break
             else:
                 time.sleep(0.5)
@@ -93,13 +95,18 @@ def cadastrar_Hospede():
             else:
                 cur.execute("SELECT COUNT(*) FROM hospede;")
                 resCodigo = cur.fetchone()
-                print(f"Temos 20 quartos no total, disponível no momento: {20 - resCodigo[0]} quartos.\nDigite novamente o número do quarto:> ")
+                print(f"Temos 20 quartos no total, disponível no momento: {20 - resCodigo[0]} quartos.")
         
         # fora do while
         # nomeHospede = input("\nNome do hóspede: ")
         # qtdPessoas = input("N° de pessoas no quarto: ") # validar n°
         # numeroQuartoAlugado = input("N° do quarto: ")
-        diarias = input("Quantidade de diárias: ")
+        while True:
+            diarias = input("Quantidade de diárias: ")
+            if diarias.isdigit() and int(diarias) > 0:
+                break
+            else:
+                print("\nInsira novamente o n° de diárias: ")
         print("Check-In realizado no dia: " + str(datetime.datetime.now()))
         currentdate = datetime.datetime.today()
         dataCheckIn = currentdate.date() # formato data ex: 2023-11-17 (YYYY-MM-DD)
@@ -199,7 +206,7 @@ def alterar_Hospede():
                 while True:
                     nomeHospede = input("\nNome do hóspede (Nome e Sobrenome iniciados com letra maiúscula, separados por espaço).\n Exemplo: Ronaldinho Neymar\n>  ")
                     partes_do_nome = nomeHospede.split()
-                    if (regexPadraoCaracteresNumeros.search(nomeHospede) == None) and (len(partes_do_nome) == 2 and partes_do_nome[0].istitle() and partes_do_nome[1].istitle() and len(nomeHospede)):
+                    if (regexPadraoCaracteresNumeros.search(nomeHospede) != None) and (len(partes_do_nome) == 2 and partes_do_nome[0].istitle() and partes_do_nome[1].istitle() and len(nomeHospede)):
                         break
                     else:   
                         time.sleep(0.5)
@@ -214,21 +221,35 @@ def alterar_Hospede():
             case '2':
                 while True:
                     time.sleep(0.5)
-                    numeroQuarto = input("Insira a atualização referente ao número de quartos: ")
+                    numeroQuarto = input("Insira a atualização referente ao número do quarto: 1 à 20\n> ")
                     time.sleep(0.5)
-                    if numeroQuarto.upper() in {'1', '2', '3','4','5','6'}:
+                    if numeroQuarto.isdigit() and 1 <= int(numeroQuarto) <= 20:
+                        time.sleep(0.5)
+                        cur.execute("Select count(*), numeroQuarto from hospede where numeroQuarto = " + numeroQuarto)
+                        resCodigo = cur.fetchone()
+                        time.sleep(0.5)
+                        if resCodigo[0] == 1:
+                            if numeroQuarto == str(resCodigo[1]):
+                                print('\nEste quarto de N°:', resCodigo[1], 'já está ocupado, selecione outro. Por favor!')
+                            else:
+                                break
+                        else:
+                            break
+                        time.sleep(0.5)
+
+                conn.execute("UPDATE hospede SET numeroQuarto = ? WHERE idHospede = ?;", (numeroQuarto,idHospedeLocal));
+                conn.commit()
+                time.sleep(0.5)
+                print("\nAlteração concluída!")
+                time.sleep(0.5)
+                escolha_Hospede()
+            case '3':
+                while True:
+                    qtdDiarias = input("Insira a atualização referente ao número de diárias: ")
+                    if qtdDiarias.isdigit() and int(qtdDiarias) > 0:
                         break
                     else:
-                        time.sleep(0.5)
-                        print("A capacidade é de até 6 pessoas por quarto. Digite novamente.")
-                    conn.execute("UPDATE hospede SET numeroQuarto = ? WHERE idHospede = ?;", (numeroQuarto,idHospedeLocal));
-                    conn.commit()
-                    time.sleep(0.5)
-                    print("\nAlteração concluída!")
-                    time.sleep(0.5)
-                    escolha_Hospede()
-            case '3':
-                qtdDiarias = input("Insira a atualização referente ao número de diárias: ")
+                        print("\nInsira novamente o n° de diárias: ")
                 time.sleep(0.5)
                 conn.execute("UPDATE hospede SET qtdDiarias = ? WHERE idHospede = ?;", (qtdDiarias,idHospedeLocal));
                 conn.commit()
