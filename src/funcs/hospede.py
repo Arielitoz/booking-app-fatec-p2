@@ -78,11 +78,21 @@ def cadastrar_Hospede():
         while True:
             numeroQuartoAlugado = input("N° do quarto: ")
             if numeroQuartoAlugado.isdigit() and 1 <= int(numeroQuartoAlugado) <= 20:
-                break
+                cur.execute("Select count(*), numeroQuarto from hospede where numeroQuarto = " + numeroQuartoAlugado)
+                resCodigo = cur.fetchone()
+                if resCodigo[0] == 1:
+                    if numeroQuartoAlugado == str(resCodigo[1]):
+                        print('\nEste quarto de N°:', resCodigo[1], 'já está ocupado, selecione outro. Por favor!')
+                    else:
+                        break
+                else:
+                    break
             else:
                 cur.execute("SELECT COUNT(*) FROM hospede;")
                 resCodigo = cur.fetchone()
-                print(f"Temos 20 quartos no total, disponível no momento: {20 - resCodigo[0]} quartos. Digite novamente.")
+                print(f"Temos 20 quartos no total, disponível no momento: {20 - resCodigo[0]} quartos.\nDigite novamente o número do quarto:> ")
+        
+        # fora do while
         # nomeHospede = input("\nNome do hóspede: ")
         # qtdPessoas = input("N° de pessoas no quarto: ") # validar n°
         # numeroQuartoAlugado = input("N° do quarto: ")
