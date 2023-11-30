@@ -14,8 +14,4 @@ Necessidade da tarefa , criação de um CRUD em python. Contendo conexão à um 
 - Encerrar a aplicação: CTRL + C
 
 # Steps:
-[ X ] Crud Check:
-    - Create
-    - Read ( All / Id)
-    - Update
-    - Delete
+[ X ] Crud Check complete
